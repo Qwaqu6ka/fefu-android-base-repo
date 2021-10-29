@@ -13,6 +13,7 @@
         android:layout_marginStart="18dp"
         android:layout_marginTop="20dp"
         android:background="@color/white"
+        android:contentDescription="@string/image"
         android:src="@drawable/ic_arrow_back"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -32,6 +33,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
+        android:contentDescription="@string/image"
         android:src="@drawable/ic_bike"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -60,26 +62,16 @@
         android:layout_marginTop="10dp"
         android:hint="@string/pass_hint"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/login_layout">
+        app:layout_constraintTop_toBottomOf="@id/login_layout"
+        app:passwordToggleEnabled="true">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/pass_field"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:inputType="textPassword" />
 
     </com.google.android.material.textfield.TextInputLayout>
-
-    <ImageButton
-        style="@android:style/Widget.Holo.Light.ImageButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="15dp"
-        android:background="@color/white"
-        android:src="@drawable/ic_eye"
-        app:layout_constraintBottom_toBottomOf="@id/pass_layout"
-        app:layout_constraintEnd_toEndOf="@id/pass_layout"
-        app:layout_constraintTop_toTopOf="@id/pass_layout"
-        app:layout_constraintVertical_bias="0.6" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/logButton_log"
