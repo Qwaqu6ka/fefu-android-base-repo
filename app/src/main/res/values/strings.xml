@@ -1,3 +1,18 @@
 <resources>
     <string name="app_name">Activity Tracker</string>
+    <string name="best_text">Пожалуй лучший фитнес трекер в ДВФУ</string>
+    <string name="last_text">Созданный студентами 2-го курса</string>
+    <string name="reg_text">Зарегистрироваться</string>
+    <string name="already_have">Уже есть аккаунт?</string>
+    <string name="register_head">Регистрация</string>
+    <string name="enter_head">Вход</string>
+    <string name="login_button">Войти</string>
+    <string name="login_hint">Логин</string>
+    <string name="name_hint">Имя</string>
+    <string name="pass_hint">Пароль</string>
+    <string name="re_pass_hint">Повторите пароль</string>
+    <string name="sex">Пол</string>
+    <string name="agreement">Нажимая на кнопку, вы соглашаетесь
+        с <a href="#">политикой конфиденциальности</a> и обработки персональных данных, а также принимаете <a href="#">пользовательское соглашение</a></string>
+
 </resources>
