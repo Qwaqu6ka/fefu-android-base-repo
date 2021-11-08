@@ -13,11 +13,14 @@
     <string name="re_pass_hint">Повторите пароль</string>
     <string name="sex">Пол</string>
     <string name="image">IMG?</string>
-    <string-array name="sex_list">
-        <item>Мужской</item>
-        <item>Женский</item>
-    </string-array>
-    <string name="agreement">Нажимая на кнопку, вы соглашаетесь
-        с <a href="#">политикой конфиденциальности</a> и обработки персональных данных, а также принимаете <a href="#">пользовательское соглашение</a></string>
+    <string name="men">Мужской</string>
+    <string name="women">Женский</string>
+    <string name="agreement">Нажимая на кнопку, вы соглашаетесь с
+        <a style="text-decoration: none;" href="#">политикой конфиденциальности</a> и обработки
+        персональных данных, а также принимаете
+        <a style="text-decoration: none;" href="#">пользовательское соглашение</a>
+    </string>
+    <string name="activity">Активность</string>
+    <string name="profile">Профиль</string>
 
 </resources>

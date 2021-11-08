@@ -6,83 +6,76 @@
     android:layout_height="match_parent"
     tools:context=".login_activity">
 
-    <ImageButton
-        android:id="@+id/back_log"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="18dp"
-        android:layout_marginTop="20dp"
-        android:background="@color/white"
-        android:contentDescription="@string/image"
-        android:src="@drawable/ic_arrow_back"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:text="@string/enter_head"
-        android:textSize="22sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toEndOf="@id/back_log"
-        app:layout_constraintTop_toTopOf="@id/back_log" />
-
-    <ImageView
-        android:id="@+id/bike_img"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:contentDescription="@string/image"
-        android:src="@drawable/ic_bike"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/back_log" />
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/login_layout"
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/logToolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="18dp"
-        android:hint="@string/login_hint"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/bike_img">
+        app:layout_constraintTop_toTopOf="parent"
+        app:navigationIcon="@drawable/ic_arrow_back"
+        app:title="@string/enter_head" />
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/login_field"
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/logToolbar">
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-    </com.google.android.material.textfield.TextInputLayout>
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/pass_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="18dp"
-        android:layout_marginTop="10dp"
-        android:hint="@string/pass_hint"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/login_layout"
-        app:passwordToggleEnabled="true">
+            <ImageView
+                android:id="@+id/bike_img"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="24dp"
+                android:contentDescription="@string/image"
+                android:src="@drawable/ic_bike" />
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/pass_field"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:inputType="textPassword" />
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/login_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="16dp"
+                android:hint="@string/login_hint">
 
-    </com.google.android.material.textfield.TextInputLayout>
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/login_field"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/logButton_log"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="18dp"
-        android:layout_marginTop="30dp"
-        android:height="60dp"
-        android:text="@string/login_button"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/pass_layout" />
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/pass_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="16dp"
+                android:hint="@string/pass_hint"
+                app:passwordToggleEnabled="true">
 
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/pass_field"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:inputType="textPassword" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/logButton_log"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="32dp"
+                android:layout_marginBottom="32dp"
+                android:text="@string/login_button"
+                android:textSize="16sp" />
+
+        </LinearLayout>
+    </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>
