@@ -22,5 +22,7 @@
     </string>
     <string name="activity">Активность</string>
     <string name="profile">Профиль</string>
+    <string name="my_activity">Моя</string>
+    <string name="user_activity">Пользователей</string>
 
 </resources>

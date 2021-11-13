@@ -145,7 +145,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="16dp"
                 android:layout_marginTop="24dp"
-                android:layout_marginBottom="40dp"
+                android:layout_marginBottom="20dp"
                 android:lineSpacingExtra="1dp"
                 android:text="@string/agreement"
                 android:textAlignment="center"

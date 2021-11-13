@@ -5,9 +5,9 @@ import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
-import android.widget.ImageButton;
+
+import ru.fefu.mainpart.MainPartActivity;
 
 public class login_activity extends AppCompatActivity {
 
@@ -21,7 +21,7 @@ public class login_activity extends AppCompatActivity {
 
         Button logButton = findViewById(R.id.logButton_log);
         logButton.setOnClickListener(e -> {
-            Intent i = new Intent(this, body_activity.class);
+            Intent i = new Intent(this, MainPartActivity.class);
             startActivity(i);
             finish();
         });

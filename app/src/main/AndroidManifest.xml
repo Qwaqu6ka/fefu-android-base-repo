@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Activity">
         <activity
-            android:name=".body_activity"
+            android:name="ru.fefu.mainpart.MainPartActivity"
             android:exported="false" />
         <activity
             android:name=".register_activity"
