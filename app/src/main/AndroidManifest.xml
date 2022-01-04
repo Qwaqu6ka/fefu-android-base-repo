@@ -10,16 +10,19 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Activity">
         <activity
-            android:name="ru.fefu.mainpart.MainPartActivity"
+            android:name="ru.fefu.activities.ActivityDetails"
             android:exported="false" />
         <activity
-            android:name=".register_activity"
+            android:name="ru.fefu.mainmenu.MainPartActivity"
             android:exported="false" />
         <activity
-            android:name=".login_activity"
+            android:name="ru.fefu.welcomescreen.register_activity"
             android:exported="false" />
         <activity
-            android:name=".welcome_activity"
+            android:name="ru.fefu.welcomescreen.login_activity"
+            android:exported="false" />
+        <activity
+            android:name="ru.fefu.welcomescreen.welcome_activity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

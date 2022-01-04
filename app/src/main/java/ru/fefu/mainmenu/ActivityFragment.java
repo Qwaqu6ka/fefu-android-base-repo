@@ -1,4 +1,4 @@
-package ru.fefu.mainpart;
+package ru.fefu.mainmenu;
 
 import android.os.Bundle;
 
@@ -14,8 +14,6 @@ import android.view.ViewGroup;
 
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
-
-import java.util.Objects;
 
 import ru.fefu.activitytracker.R;
 

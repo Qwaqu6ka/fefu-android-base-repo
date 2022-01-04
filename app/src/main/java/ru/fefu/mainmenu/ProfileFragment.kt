@@ -1,4 +1,4 @@
-package ru.fefu.mainpart
+package ru.fefu.mainmenu
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment

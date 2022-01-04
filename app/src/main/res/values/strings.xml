@@ -24,5 +24,9 @@
     <string name="profile">Профиль</string>
     <string name="my_activity">Моя</string>
     <string name="user_activity">Пользователей</string>
-
+    <string name="start_finish">|</string>
+    <string name="start">Старт</string>
+    <string name="finish">Финиш</string>
+    <string name="some_text">Some text</string>
+    <string name="yesterday">Вчера</string>
 </resources>

@@ -1,4 +1,4 @@
-package ru.fefu.activitytracker;
+package ru.fefu.welcomescreen;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -6,6 +6,8 @@ import androidx.appcompat.widget.Toolbar;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
+
+import ru.fefu.activitytracker.R;
 
 public class register_activity extends AppCompatActivity {
 
@@ -22,6 +24,7 @@ public class register_activity extends AppCompatActivity {
         regButton.setOnClickListener(e -> {
             Intent i = new Intent(this, login_activity.class);
             startActivity(i);
+            onBackPressed();
         });
     }
 }
