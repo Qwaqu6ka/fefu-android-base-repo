@@ -8,6 +8,28 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Activity" />
+        android:theme="@style/Theme.Activity">
+        <activity
+            android:name="ru.fefu.activities.ActivityDetails"
+            android:exported="false" />
+        <activity
+            android:name="ru.fefu.mainmenu.MainPartActivity"
+            android:exported="false" />
+        <activity
+            android:name="ru.fefu.welcomescreen.register_activity"
+            android:exported="false" />
+        <activity
+            android:name="ru.fefu.welcomescreen.login_activity"
+            android:exported="false" />
+        <activity
+            android:name="ru.fefu.welcomescreen.welcome_activity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
 
 </manifest>
