@@ -11,7 +11,6 @@ class RecyclerAdapter(activities: List<RecyclerItemClass>) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private var itemClickListener: (Array<String?>) -> Unit = {}
-
     private val mutableActivity = activities.toMutableList()
 
     companion object {

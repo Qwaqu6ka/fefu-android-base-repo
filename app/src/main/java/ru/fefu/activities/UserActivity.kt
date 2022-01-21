@@ -11,7 +11,6 @@ import ru.fefu.basefragment.BaseFragment
 class UserActivity : BaseFragment<FragmentUserActivityBinding>(R.layout.fragment_user_activity) {
 
     private val myList = TestList()
-
     private val myAdapter = RecyclerAdapter(myList.getList())
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

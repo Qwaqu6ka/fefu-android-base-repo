@@ -2,12 +2,8 @@ package ru.fefu.activities
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
-import android.view.View
 import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
-import androidx.core.view.marginTop
-import ru.fefu.activitytracker.R
 import ru.fefu.activitytracker.databinding.ActivityDetailsBinding
 
 class ActivityDetails : AppCompatActivity() {
@@ -16,7 +12,6 @@ class ActivityDetails : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         binding = ActivityDetailsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
