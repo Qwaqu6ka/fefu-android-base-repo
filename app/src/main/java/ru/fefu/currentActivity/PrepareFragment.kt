@@ -4,11 +4,16 @@ import ru.fefu.activitytracker.R
 import ru.fefu.activitytracker.databinding.FragmentPrepareBinding
 import ru.fefu.basefragment.BaseFragment
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import androidx.core.os.bundleOf
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import ru.fefu.database.ActiveTypes
+import ru.fefu.database.Activity
+import ru.fefu.database.App
+import java.util.*
 
 class PrepareFragment : BaseFragment<FragmentPrepareBinding> (R.layout.fragment_prepare) {
 
@@ -16,8 +21,7 @@ class PrepareFragment : BaseFragment<FragmentPrepareBinding> (R.layout.fragment_
         super.onViewCreated(view, savedInstanceState)
         val recycler: RecyclerView = binding.recycler
         val button: Button = binding.startButton
-        val listOfActivities = TestList()
-        val adapter = RecyclerAdapter(listOfActivities.getList(), requireContext())
+        val adapter = RecyclerAdapter(ActiveTypes.values(), requireContext())
 
         var activeObject = 0
 
@@ -39,7 +43,7 @@ class PrepareFragment : BaseFragment<FragmentPrepareBinding> (R.layout.fragment_
         button.setOnClickListener {
             parentFragmentManager.setFragmentResult(
                 "prepareFragment",
-                bundleOf("bundleKey" to listOfActivities.getList()[activeObject].name)
+                bundleOf("bundleKey" to ActiveTypes.values()[activeObject].value)
             )
             if (prepareFragment != null)
                 if (runFragment != null)
@@ -54,6 +58,15 @@ class PrepareFragment : BaseFragment<FragmentPrepareBinding> (R.layout.fragment_
                         .add(R.id.container, RunFragment(), "RunFragment")
                         .addToBackStack("RunFragment")
                         .commit()
+
+            App.INSTANCE.db.activeDao().insert(
+                Activity(
+                    0,
+                    ActiveTypes.values()[activeObject],
+                    Date(),
+                    Date()
+                )
+            )
         }
     }
 }

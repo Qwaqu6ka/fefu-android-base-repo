@@ -1,5 +1,6 @@
 package ru.fefu.activities
 
+import android.annotation.SuppressLint
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.TextView
@@ -10,6 +11,7 @@ class ActivityDetails : AppCompatActivity() {
 
     private lateinit var binding: ActivityDetailsBinding
 
+    @SuppressLint("SimpleDateFormat")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityDetailsBinding.inflate(layoutInflater)
@@ -20,17 +22,24 @@ class ActivityDetails : AppCompatActivity() {
         val distance: TextView = binding.distance
         val time: TextView = binding.time
         val duration: TextView = binding.duration
+        val startTime: TextView = binding.start
+        val finishTime: TextView = binding.finish
 
-        val arr = intent.getStringArrayExtra("itemInfo")
-        distance.text = arr?.get(0)
-        duration.text = arr?.get(1)
-        toolbar.title = arr?.get(2)
-        time.text = arr?.get(3)
-        if (arr?.get(4) == null || arr[4] == "") {
-            binding.root.removeView(username)
+        var activityExtras = intent.getStringExtra("Activity")
+        activityExtras = activityExtras?.substringAfter('(')?.substringBefore(')')
+        val fields = activityExtras?.split(", ")
+
+        if (fields != null) {
+            for (field in fields) {
+                val temp = field.split("=")
+                when (temp[0]) {
+                    "id" -> distance.text = temp[1]
+                    "activeType" -> toolbar.title = temp[1]
+//                    "startTime" -> startTime.text = temp[1]
+//                    "finishTime" -> finishTime.text = temp[1]
+                }
+            }
         }
-        else
-            username.text = arr[4]
 
         toolbar.setNavigationOnClickListener { onBackPressed() }
 

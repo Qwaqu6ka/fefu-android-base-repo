@@ -11,11 +11,13 @@ import android.widget.TextView
 import androidx.annotation.DrawableRes
 import androidx.recyclerview.widget.RecyclerView
 import ru.fefu.activitytracker.R
+import ru.fefu.database.ActiveTypes
 import kotlin.coroutines.coroutineContext
 
-class RecyclerAdapter(activeType: List<RecyclerItem>, context: Context) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class RecyclerAdapter(activeType: Array<ActiveTypes>, context: Context) :
+    RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    private val mActiveType = activeType.toMutableList()
+    private val mutActiveType = activeType.toMutableList()
     private var itemClickListener: (Int) -> Unit = {}
     private val listOfHolders = mutableListOf<RecyclerView.ViewHolder>()
 
@@ -29,7 +31,7 @@ class RecyclerAdapter(activeType: List<RecyclerItem>, context: Context) : Recycl
         itemClickListener = listener
     }
 
-    override fun getItemCount(): Int = mActiveType.size
+    override fun getItemCount(): Int = mutActiveType.size
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val view =
@@ -38,32 +40,28 @@ class RecyclerAdapter(activeType: List<RecyclerItem>, context: Context) : Recycl
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        (holder as MyViewHolder).bind(mActiveType[position], position)
+        (holder as MyViewHolder).bind(mutActiveType[position], position)
         listOfHolders.add(holder)
     }
 
     inner class MyViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
         private val activeTypeText:TextView = itemView.findViewById(R.id.text)
 
-        fun bind(item: RecyclerItem, position: Int) {
-            activeTypeText.text = item.name
+        fun bind(item: ActiveTypes, position: Int) {
+            activeTypeText.text = item.value
             if (position == 0) {
                 itemView.background = selectedBack
-                mActiveType[0].isActive = true
             }
 
             itemView.setOnClickListener {
-                if (!mActiveType[position].isActive) {
-                    for (i in mActiveType.indices) {
-                        if (mActiveType[i].isActive) {
-                            mActiveType[i].isActive = false
-                            listOfHolders[i].itemView.background = unselectedBack
+                if (it.background != selectedBack) {
+                    for (i in listOfHolders) {
+                        if (i.itemView.background == selectedBack) {
+                            i.itemView.background = unselectedBack
                             break
                         }
                     }
-
-                    mActiveType[position].isActive = true
-                    itemView.background = selectedBack
+                    it.background = selectedBack
 
                 }
                 itemClickListener.invoke(position)

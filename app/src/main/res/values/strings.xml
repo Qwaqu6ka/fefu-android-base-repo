@@ -37,4 +37,6 @@
     <string name="accept">Принять</string>
     <string name="go">Погнали? :)</string>
     <string name="begin">Начать</string>
+    <string name="share">Поделиться</string>
+    <string name="delete">Удалить</string>
 </resources>
