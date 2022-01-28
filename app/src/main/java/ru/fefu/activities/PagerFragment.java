@@ -1,5 +1,6 @@
-package ru.fefu.mainmenu;
+package ru.fefu.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -11,17 +12,21 @@ import androidx.viewpager2.widget.ViewPager2;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
 import ru.fefu.activitytracker.R;
+import ru.fefu.currentActivity.MapActivity;
+import ru.fefu.mainmenu.FragmentAdapter;
 
-public class ActivityFragment extends Fragment {
+public class PagerFragment extends Fragment {
 
     TabLayout tabLayout;
     FragmentAdapter adapter;
     ViewPager2 viewPager2;
+    ImageButton button;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -42,6 +47,7 @@ public class ActivityFragment extends Fragment {
 
         tabLayout = requireView().findViewById(R.id.tabLayout);
         viewPager2 = requireView().findViewById(R.id.viewPager2);
+        button = requireView().findViewById(R.id.startButton);
 
         FragmentManager fm = requireActivity().getSupportFragmentManager();
         adapter = new FragmentAdapter(fm, getLifecycle());
@@ -62,5 +68,10 @@ public class ActivityFragment extends Fragment {
             }
         );
         mediator.attach();
+
+        button.setOnClickListener(e -> {
+            Intent i = new Intent(getActivity(), MapActivity.class);
+            startActivity(i);
+        });
     }
 }

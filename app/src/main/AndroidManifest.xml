@@ -3,6 +3,7 @@
     package="ru.fefu.activitytracker">
 
     <application
+        android:name="ru.fefu.database.App"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -10,19 +11,22 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Activity">
         <activity
+            android:name="ru.fefu.currentActivity.MapActivity"
+            android:exported="false" />
+        <activity
             android:name="ru.fefu.activities.ActivityDetails"
             android:exported="false" />
         <activity
             android:name="ru.fefu.mainmenu.MainPartActivity"
             android:exported="false" />
         <activity
-            android:name="ru.fefu.welcomescreen.register_activity"
+            android:name="ru.fefu.welcomescreen.RegisterActivity"
             android:exported="false" />
         <activity
-            android:name="ru.fefu.welcomescreen.login_activity"
+            android:name="ru.fefu.welcomescreen.LoginActivity"
             android:exported="false" />
         <activity
-            android:name="ru.fefu.welcomescreen.welcome_activity"
+            android:name="ru.fefu.welcomescreen.WelcomeActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

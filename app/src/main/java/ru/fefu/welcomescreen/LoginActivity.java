@@ -10,7 +10,7 @@ import android.widget.Button;
 import ru.fefu.activitytracker.R;
 import ru.fefu.mainmenu.MainPartActivity;
 
-public class login_activity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

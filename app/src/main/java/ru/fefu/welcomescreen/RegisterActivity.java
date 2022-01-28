@@ -9,7 +9,7 @@ import android.widget.Button;
 
 import ru.fefu.activitytracker.R;
 
-public class register_activity extends AppCompatActivity {
+public class RegisterActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,9 +22,9 @@ public class register_activity extends AppCompatActivity {
 
         Button regButton = findViewById(R.id.regButton_reg);
         regButton.setOnClickListener(e -> {
-            Intent i = new Intent(this, login_activity.class);
+            Intent i = new Intent(this, LoginActivity.class);
             startActivity(i);
-            onBackPressed();
+            finish();
         });
     }
 }

@@ -29,4 +29,14 @@
     <string name="finish">Финиш</string>
     <string name="some_text">Some text</string>
     <string name="yesterday">Вчера</string>
+    <string name="save">Сохранить</string>
+    <string name="change_pass">Изменить пароль</string>
+    <string name="exit_button">Выйти</string>
+    <string name="old_pass">Старый пароль</string>
+    <string name="new_pass">Новый пароль</string>
+    <string name="accept">Принять</string>
+    <string name="go">Погнали? :)</string>
+    <string name="begin">Начать</string>
+    <string name="share">Поделиться</string>
+    <string name="delete">Удалить</string>
 </resources>

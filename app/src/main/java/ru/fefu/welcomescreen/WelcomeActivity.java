@@ -9,7 +9,7 @@ import android.widget.Button;
 
 import ru.fefu.activitytracker.R;
 
-public class welcome_activity extends AppCompatActivity implements View.OnClickListener {
+public class WelcomeActivity extends AppCompatActivity implements View.OnClickListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,11 +29,11 @@ public class welcome_activity extends AppCompatActivity implements View.OnClickL
         Intent i;
         switch (v.getId()) {
             case R.id.regButton_welcome:
-                i = new Intent(this, register_activity.class);
+                i = new Intent(this, RegisterActivity.class);
                 startActivity(i);
                 break;
             case R.id.logButton_welcome:
-                i = new Intent(this, login_activity.class);
+                i = new Intent(this, LoginActivity.class);
                 startActivity(i);
                 break;
         }

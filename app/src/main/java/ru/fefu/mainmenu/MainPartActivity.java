@@ -11,7 +11,9 @@ import android.view.MenuItem;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
+import ru.fefu.activities.PagerFragment;
 import ru.fefu.activitytracker.R;
+import ru.fefu.profile.ProfileFragment;
 
 
 public class MainPartActivity extends AppCompatActivity implements NavigationBarView.OnItemSelectedListener{
@@ -27,7 +29,10 @@ public class MainPartActivity extends AppCompatActivity implements NavigationBar
                 if (active != null)
                     fm.beginTransaction().show(active).commit();
                 else
-                    fm.beginTransaction().add(R.id.container, new ActivityFragment(), "ActivityFragment").commit();
+                    fm.beginTransaction().add(R.id.container, new PagerFragment(), "ActivityFragment").commit();
+
+                while (fm.getBackStackEntryCount() != 0)
+                    fm.popBackStackImmediate();
 
                 if (profile != null)
                     fm.beginTransaction().hide(profile).commit();
@@ -39,6 +44,10 @@ public class MainPartActivity extends AppCompatActivity implements NavigationBar
                     fm.beginTransaction().show(profile).commit();
                 else
                     fm.beginTransaction().add(R.id.container, new ProfileFragment(), "ProfileFragment").commit();
+
+                while (fm.getBackStackEntryCount() != 0) {
+                    fm.popBackStackImmediate();
+                }
 
                 if (active != null)
                     fm.beginTransaction().hide(active).commit();
@@ -57,9 +66,7 @@ public class MainPartActivity extends AppCompatActivity implements NavigationBar
 
         if (savedInstanceState == null) {
             fm.beginTransaction()
-                .add(
-                    R.id.container, new ActivityFragment(), "ActivityFragment"
-                )
+                .add(R.id.container, new PagerFragment(), "ActivityFragment")
                 .commit();
         }
     }
