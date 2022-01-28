@@ -1,5 +1,7 @@
 package ru.fefu.currentActivity
 
+import android.Manifest
+import android.content.pm.PackageManager
 import ru.fefu.activitytracker.R
 import ru.fefu.activitytracker.databinding.FragmentPrepareBinding
 import ru.fefu.basefragment.BaseFragment
@@ -7,6 +9,8 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Button
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -22,6 +26,7 @@ class PrepareFragment : BaseFragment<FragmentPrepareBinding> (R.layout.fragment_
         val recycler: RecyclerView = binding.recycler
         val button: Button = binding.startButton
         val adapter = RecyclerAdapter(ActiveTypes.values(), requireContext())
+        val activity = (requireActivity() as MapActivity)
 
         var activeObject = 0
 
@@ -41,32 +46,50 @@ class PrepareFragment : BaseFragment<FragmentPrepareBinding> (R.layout.fragment_
         val prepareFragment = parentFragmentManager.findFragmentByTag("PrepareFragment")
 
         button.setOnClickListener {
-            parentFragmentManager.setFragmentResult(
-                "prepareFragment",
-                bundleOf("bundleKey" to ActiveTypes.values()[activeObject].value)
-            )
-            if (prepareFragment != null)
-                if (runFragment != null)
-                    parentFragmentManager.beginTransaction()
-                        .hide(prepareFragment)
-                        .show(runFragment)
-                        .addToBackStack("RunFragment")
-                        .commit()
-                else
-                    parentFragmentManager.beginTransaction()
-                        .hide(prepareFragment)
-                        .add(R.id.container, RunFragment(), "RunFragment")
-                        .addToBackStack("RunFragment")
-                        .commit()
-
-            App.INSTANCE.db.activeDao().insert(
-                Activity(
-                    0,
-                    ActiveTypes.values()[activeObject],
-                    Date(),
-                    Date()
+            if (ContextCompat.checkSelfPermission(
+                    activity,
+                    Manifest.permission.ACCESS_FINE_LOCATION
+                ) == PackageManager.PERMISSION_DENIED
+            ) {
+                activity.permissionRequestLauncher.launch(
+                    arrayOf(
+                        Manifest.permission.ACCESS_COARSE_LOCATION,
+                        Manifest.permission.ACCESS_FINE_LOCATION
+                    )
                 )
-            )
+            }
+            else {
+                parentFragmentManager.setFragmentResult(
+                    "prepareFragment",
+                    bundleOf("bundleKey" to ActiveTypes.values()[activeObject].value)
+                )
+                if (prepareFragment != null)
+                    if (runFragment != null)
+                        parentFragmentManager.beginTransaction()
+                            .hide(prepareFragment)
+                            .show(runFragment)
+                            .addToBackStack("RunFragment")
+                            .commit()
+                    else
+                        parentFragmentManager.beginTransaction()
+                            .hide(prepareFragment)
+                            .add(R.id.container, RunFragment(), "RunFragment")
+                            .addToBackStack("RunFragment")
+                            .commit()
+
+                val activityId =
+                    App.INSTANCE.db.activeDao().insert(
+                    Activity(
+                        0,
+                        ActiveTypes.values()[activeObject],
+                        Date(),
+                        null,
+                        listOf()
+                    )
+                )
+
+                activity.startLocationService()
+            }
         }
     }
 }

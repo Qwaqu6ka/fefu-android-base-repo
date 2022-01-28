@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
+import androidx.room.Update
 
 @Dao
 interface ActiveDao {
@@ -14,5 +15,5 @@ interface ActiveDao {
     fun getById(id: Int): Activity
 
     @Insert
-    fun insert(active: Activity)
+    fun insert(active: Activity): Long
 }

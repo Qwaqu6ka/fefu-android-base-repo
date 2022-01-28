@@ -1,6 +1,6 @@
 package ru.fefu.database
 
-data class Coords(
+data class Point(
     val latitude: Double,
     val longitude: Double
 )
