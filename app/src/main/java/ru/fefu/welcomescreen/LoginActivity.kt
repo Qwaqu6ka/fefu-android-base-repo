@@ -26,6 +26,7 @@ class LoginActivity : AppCompatActivity() {
 
         binding.toolbar.setNavigationOnClickListener { onBackPressed() }
         binding.logButton.setOnClickListener {
+            it.isEnabled = false
             login()
         }
     }
@@ -36,6 +37,7 @@ class LoginActivity : AppCompatActivity() {
             binding.passField.text.toString()
         ).enqueue(object : Callback<ResponseModel> {
             override fun onResponse(call: Call<ResponseModel>, response: Response<ResponseModel>) {
+                Log.d("myLog", ""+response.body())
                 if (response.isSuccessful) {
                     val sharedPreferences = getSharedPreferences("user", Context.MODE_PRIVATE)
                     sharedPreferences.edit().putString("token", response.body()?.token).apply()
@@ -46,10 +48,12 @@ class LoginActivity : AppCompatActivity() {
                 else {
                     Toast.makeText(parent, "Неверные данные", Toast.LENGTH_SHORT).show()
                 }
+                binding.logButton.isEnabled = true
             }
 
             override fun onFailure(call: Call<ResponseModel>, t: Throwable) {
                 t.printStackTrace()
+                binding.logButton.isEnabled = true
             }
         })
     }

@@ -50,20 +50,29 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>(R.layout.fragment_p
         }
 
         binding.exitButton.setOnClickListener {
-            logout()
+            binding.exitButton.isEnabled = false
+            var token = sharedPreferences?.getString("token", "-1") ?: "-1"
+            if (token != "-1") {
+                token = "Bearer $token"
+                Log.d("myLog", token)
+                logout(token)
+            }
+            else {
+                Log.d("myLog", "Ну пиздец!")
+            }
         }
     }
 
-    private fun logout() {
-        App.getApi.logout().enqueue(object : Callback<Unit> {
+    private fun logout(token: String) {
+        App.getApi.logout(token).enqueue(object : Callback<Unit> {
             override fun onResponse(call: Call<Unit>, response: Response<Unit>) {
                 Log.d("myLog", ""+response)
                 if (response.isSuccessful) {
                     val sharedPreferences =
                         context?.getSharedPreferences("user", Context.MODE_PRIVATE)
-                    sharedPreferences?.edit()?.putString("token", "")?.apply()
+                    sharedPreferences?.edit()?.putString("token", "-1")?.apply()
                     startActivity(Intent(activity, WelcomeActivity::class.java))
-                    activity?.finish()
+                    activity?.finishAffinity()
                 } else {
                     Toast.makeText(
                         activity,
@@ -71,10 +80,12 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>(R.layout.fragment_p
                         Toast.LENGTH_SHORT
                     ).show()
                 }
+                binding.exitButton.isEnabled = true
             }
 
             override fun onFailure(call: Call<Unit>, t: Throwable) {
                 t.printStackTrace()
+                binding.exitButton.isEnabled = true
             }
         })
     }

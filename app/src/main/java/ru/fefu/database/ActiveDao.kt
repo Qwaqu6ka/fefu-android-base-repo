@@ -16,4 +16,5 @@ interface ActiveDao {
 
     @Insert
     fun insert(active: Activity): Long
+
 }

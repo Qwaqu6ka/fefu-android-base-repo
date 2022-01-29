@@ -1,5 +1,6 @@
 package ru.fefu.api
 
+import android.content.Context
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.Header
@@ -26,5 +27,5 @@ interface LoginApi {
     ): Call<ResponseModel>
 
     @POST("api/auth/logout")
-    fun logout(): Call<Unit>
+    fun logout(@Header("Authorization") token: String = "Bearer 491|VgDKM0Kve3jd023AyoKmAdkPMqI4fvcUw7zAueFM"): Call<Unit>
 }

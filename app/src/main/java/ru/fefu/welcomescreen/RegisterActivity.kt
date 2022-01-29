@@ -33,10 +33,11 @@ class RegisterActivity : AppCompatActivity() {
         binding.women.setOnClickListener { gender = 1 }
 
         binding.regButton.setOnClickListener {
-            if (binding.pass.editText?.text.toString() != binding.rePass.editText?.text.toString()) {
+            if (binding.passField.text.toString() != binding.rePassField.text.toString()) {
                 Toast.makeText(this, "Неверно повторили пароль", Toast.LENGTH_SHORT).show()
             }
             else {
+                binding.regButton.isEnabled = false
                 register()
             }
         }
@@ -50,6 +51,7 @@ class RegisterActivity : AppCompatActivity() {
             gender
         ).enqueue(object : Callback<ResponseModel> {
             override fun onResponse(call: Call<ResponseModel>, response: Response<ResponseModel>) {
+                Log.d("myLog", ""+response)
                 if (response.isSuccessful) {
                     val sharedPreferences = getSharedPreferences("user", Context.MODE_PRIVATE)
                     val body = response.body()
@@ -60,10 +62,15 @@ class RegisterActivity : AppCompatActivity() {
                     }
                     startMain()
                 }
+                else {
+                    Log.d("myLog", "Анальный ответик")
+                }
+                binding.regButton.isEnabled = true
             }
 
             override fun onFailure(call: Call<ResponseModel>, t: Throwable) {
                 t.printStackTrace()
+                binding.regButton.isEnabled = true
             }
         })
     }
