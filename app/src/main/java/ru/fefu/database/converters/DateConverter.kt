@@ -1,4 +1,4 @@
-package ru.fefu.database
+package ru.fefu.database.converters
 
 import androidx.room.TypeConverter
 import java.util.*

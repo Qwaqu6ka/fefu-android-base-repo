@@ -36,7 +36,7 @@ class RecyclerAdapter :
     private fun countDatePositions() {
         var lastDate = ""
         for (i in listToShow.indices) {
-            val itemDate = formatter.format(listToShow[i].finishTime)
+            val itemDate = formatter.format(listToShow[i].finishTime ?: 0)
             if (itemDate != lastDate) {
                 lastDate = itemDate
                 datePositions.add(datePositions.size + i to itemDate)

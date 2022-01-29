@@ -70,9 +70,9 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>(R.layout.fragment_p
                 if (response.isSuccessful) {
                     val sharedPreferences =
                         context?.getSharedPreferences("user", Context.MODE_PRIVATE)
-                    sharedPreferences?.edit()?.putString("token", "-1")?.apply()
-                    startActivity(Intent(activity, WelcomeActivity::class.java))
+                    sharedPreferences?.edit()?.putString("token", "")?.apply()
                     activity?.finishAffinity()
+                    startActivity(Intent(activity, WelcomeActivity::class.java))
                 } else {
                     Toast.makeText(
                         activity,

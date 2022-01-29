@@ -14,6 +14,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import org.osmdroid.util.GeoPoint
 import ru.fefu.database.ActiveTypes
 import ru.fefu.database.Activity
 import ru.fefu.database.App
@@ -68,16 +69,14 @@ class PrepareFragment : BaseFragment<FragmentPrepareBinding> (R.layout.fragment_
                         parentFragmentManager.beginTransaction()
                             .hide(prepareFragment)
                             .show(runFragment)
-                            .addToBackStack("RunFragment")
                             .commit()
                     else
                         parentFragmentManager.beginTransaction()
                             .hide(prepareFragment)
                             .add(R.id.container, RunFragment(), "RunFragment")
-                            .addToBackStack("RunFragment")
                             .commit()
 
-                val activityId =
+                val id =
                     App.INSTANCE.db.activeDao().insert(
                     Activity(
                         0,
@@ -87,6 +86,16 @@ class PrepareFragment : BaseFragment<FragmentPrepareBinding> (R.layout.fragment_
                         listOf()
                     )
                 )
+
+                App.INSTANCE.db.activeDao().getActivityByIdLive(id).observe(viewLifecycleOwner) {
+                    if (it.coordinates.isNotEmpty()) {
+                        val p = GeoPoint(
+                            it.coordinates.last().latitude,
+                            it.coordinates.last().longitude
+                        )
+                        activity.polyline.addPoint(p)
+                    }
+                }
 
                 activity.startLocationService()
             }
