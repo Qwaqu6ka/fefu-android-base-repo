@@ -32,6 +32,8 @@ import ru.fefu.activitytracker.LocationService
 import ru.fefu.activitytracker.R
 import ru.fefu.activitytracker.databinding.ActivityMapBinding
 import ru.fefu.database.App
+import ru.fefu.database.Point
+import ru.fefu.mainmenu.MainPartActivity
 import java.lang.Exception
 
 class MapActivity : AppCompatActivity() {
@@ -39,6 +41,7 @@ class MapActivity : AppCompatActivity() {
     companion object {
         private const val REQUEST_CODE_RESOLVE_GOOGLE_API_ERROR = 1337
         private const val REQUEST_CODE_RESOLVE_GPS_ERROR = 1338
+        var lastDrawnPoint: Point = Point(0.0, 0.0)
     }
 
     private lateinit var binding: ActivityMapBinding
@@ -78,33 +81,19 @@ class MapActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         val cardView: CardView = binding.cardView
-        val fm: FragmentManager = supportFragmentManager
-
         cardView.setBackgroundResource(R.drawable.card_view_bg)
 
-        val prepareFragment = fm.findFragmentByTag("PrepareFragment")
-        val runFragment = fm.findFragmentByTag("RunFragment")
+        val fm: FragmentManager = supportFragmentManager
 
-        fm.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
         if (LocationService.IS_ALIVE) {
-            when (runFragment) {
-                null -> fm.beginTransaction()
-                            .add(R.id.container, RunFragment(), "RunFragment")
-                            .commit()
-                else -> fm.beginTransaction()
-                            .show(runFragment)
-                            .commit()
-            }
+            fm.beginTransaction()
+                .replace(R.id.containerMapActivity, RunFragment())
+                .commit()
         }
         else {
-            when (prepareFragment) {
-                null -> fm.beginTransaction()
-                            .add(R.id.container, PrepareFragment(), "PrepareFragment")
-                            .commit()
-                else -> fm.beginTransaction()
-                            .show(prepareFragment)
-                            .commit()
-            }
+            fm.beginTransaction()
+                .replace(R.id.containerMapActivity, PrepareFragment())
+                .commit()
         }
 
         Configuration.getInstance().load(this, getPreferences(Context.MODE_PRIVATE))
@@ -268,5 +257,14 @@ class MapActivity : AppCompatActivity() {
             }
             .setNegativeButton("Отмена") { _, _ -> }
             .show()
+    }
+
+    override fun onBackPressed() {
+        if (MainPartActivity.IS_ALIVE)
+            super.onBackPressed()
+        else {
+            startActivity(Intent(this, MainPartActivity::class.java))
+            finish()
+        }
     }
 }

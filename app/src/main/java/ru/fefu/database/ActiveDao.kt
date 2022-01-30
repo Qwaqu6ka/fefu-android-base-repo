@@ -28,7 +28,7 @@ interface ActiveDao {
     fun getLastActive(): Activity
 
     @Query("SELECT * FROM Activity WHERE id=:id")
-    fun getActivityByIdLive(id: Long): LiveData<Activity>
+    fun getActivityByIdLive(id: Int): LiveData<Activity>
 
     @Query("SELECT * FROM Activity WHERE id=:id")
     fun getActivityById(id: Long): Activity

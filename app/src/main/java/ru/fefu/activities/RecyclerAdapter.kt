@@ -6,9 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import ru.fefu.activitytracker.CoordToDistance
 import ru.fefu.activitytracker.R
 import ru.fefu.database.Activity
 import java.text.SimpleDateFormat
+import java.util.*
 
 class RecyclerAdapter :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -116,12 +118,42 @@ class RecyclerAdapter :
         private val time: TextView = itemView.findViewById(R.id.time)
         private val name: TextView = itemView.findViewById(R.id.name)
 
+        @SuppressLint("SetTextI18n", "SimpleDateFormat")
         fun bind(card: Activity) {
-            dist.text = card.id.toString()
-            duration.text = "0"
             activity.text = card.activeType.value
-            time.text = "0"
-            name.text = "0"
+
+            val distance = CoordToDistance.getDistanceFromLatLonInM(card.coordinates)
+            if (distance > 1000)
+                dist.text = "${"%.2f".format(distance / 1000)} км"
+            else
+                dist.text = "${distance.toInt()} м"
+
+            var millis = card.finishTime!!.time - card.startTime.time
+            var hours = (millis / (60 * 60 * 1000)).toInt()
+            var minutes = (millis / (60 * 1000)).toInt()
+            if (hours > 0)
+                duration.text = "$hours часов ${minutes - 60 * hours} минут"
+            else if (minutes > 0)
+                duration.text = "$minutes минут"
+            else
+                duration.text = "Меньше минуты"
+
+            millis = Date().time - card.finishTime.time
+            hours = (millis / (60 * 60 * 1000)).toInt()
+            minutes = (millis / (60 * 1000)).toInt()
+            if (hours > 24)
+                time.text = SimpleDateFormat("d M y").format(card.finishTime)
+            else if (hours > 0)
+                time.text = "$hours часов ${minutes - 60 * hours} минут"
+            else if (minutes > 0)
+                time.text = "$minutes минут"
+            else
+                time.text = "Меньше минуты"
+
+            if (card.userName == "defalut@user") // имя если активноть наша
+                name.text = ""
+            else
+                name.text = card.userName
 
             itemView.setOnClickListener {
                 itemClickListener.invoke(card)

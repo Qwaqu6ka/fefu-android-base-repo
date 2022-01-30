@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.gson.Gson
 import ru.fefu.activitytracker.R
 import ru.fefu.activitytracker.databinding.FragmentMyActivityBinding
 import ru.fefu.basefragment.BaseFragment
@@ -18,8 +19,9 @@ class MyActivity : BaseFragment<FragmentMyActivityBinding>(R.layout.fragment_my_
 
         myAdapter.setItemClickListener {
             val i = Intent(activity, ActivityDetails::class.java)
-            i.putExtra("Activity", it.toString())
+            i.putExtra("Activity", Gson().toJson(it))
             startActivity(i)
+            activity?.finish()
         }
 
         App.INSTANCE.db.activeDao().getAll().observe(viewLifecycleOwner) {

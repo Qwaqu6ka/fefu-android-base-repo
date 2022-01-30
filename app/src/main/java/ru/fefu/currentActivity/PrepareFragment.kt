@@ -1,6 +1,8 @@
 package ru.fefu.currentActivity
 
 import android.Manifest
+import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import ru.fefu.activitytracker.R
 import ru.fefu.activitytracker.databinding.FragmentPrepareBinding
@@ -18,6 +20,7 @@ import org.osmdroid.util.GeoPoint
 import ru.fefu.database.ActiveTypes
 import ru.fefu.database.Activity
 import ru.fefu.database.App
+import ru.fefu.mainmenu.MainPartActivity
 import java.util.*
 
 class PrepareFragment : BaseFragment<FragmentPrepareBinding> (R.layout.fragment_prepare) {
@@ -43,9 +46,6 @@ class PrepareFragment : BaseFragment<FragmentPrepareBinding> (R.layout.fragment_
                 false
             )
 
-        val runFragment = parentFragmentManager.findFragmentByTag("RunFragment")
-        val prepareFragment = parentFragmentManager.findFragmentByTag("PrepareFragment")
-
         button.setOnClickListener {
             if (ContextCompat.checkSelfPermission(
                     activity,
@@ -60,42 +60,19 @@ class PrepareFragment : BaseFragment<FragmentPrepareBinding> (R.layout.fragment_
                 )
             }
             else {
-                parentFragmentManager.setFragmentResult(
-                    "prepareFragment",
-                    bundleOf("bundleKey" to ActiveTypes.values()[activeObject].value)
+                val newActivity = Activity(
+                    0,
+                    ActiveTypes.values()[activeObject],
+                    Date(),
+                    null,
+                    "defalut@user", // имя если активность наша
+                    listOf()
                 )
-                if (prepareFragment != null)
-                    if (runFragment != null)
-                        parentFragmentManager.beginTransaction()
-                            .hide(prepareFragment)
-                            .show(runFragment)
-                            .commit()
-                    else
-                        parentFragmentManager.beginTransaction()
-                            .hide(prepareFragment)
-                            .add(R.id.container, RunFragment(), "RunFragment")
-                            .commit()
+                App.INSTANCE.db.activeDao().insert(newActivity)
 
-                val id =
-                    App.INSTANCE.db.activeDao().insert(
-                    Activity(
-                        0,
-                        ActiveTypes.values()[activeObject],
-                        Date(),
-                        null,
-                        listOf()
-                    )
-                )
-
-                App.INSTANCE.db.activeDao().getActivityByIdLive(id).observe(viewLifecycleOwner) {
-                    if (it.coordinates.isNotEmpty()) {
-                        val p = GeoPoint(
-                            it.coordinates.last().latitude,
-                            it.coordinates.last().longitude
-                        )
-                        activity.polyline.addPoint(p)
-                    }
-                }
+                parentFragmentManager.beginTransaction()
+                    .replace(R.id.containerMapActivity, RunFragment())
+                    .commit()
 
                 activity.startLocationService()
             }

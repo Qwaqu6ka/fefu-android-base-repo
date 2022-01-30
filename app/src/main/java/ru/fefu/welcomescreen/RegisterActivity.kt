@@ -4,15 +4,11 @@ import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.content.Intent
-import android.util.Log
 import android.widget.Toast
-import com.google.android.material.textfield.TextInputEditText
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import ru.fefu.activitytracker.R
 import ru.fefu.activitytracker.databinding.ActivityRegisterBinding
-import ru.fefu.api.models.RegistrationData
 import ru.fefu.api.models.ResponseModel
 import ru.fefu.database.App
 import ru.fefu.mainmenu.MainPartActivity
@@ -35,23 +31,43 @@ class RegisterActivity : AppCompatActivity() {
         binding.regButton.setOnClickListener {
             if (binding.passField.text.toString() != binding.rePassField.text.toString()) {
                 Toast.makeText(this, "Неверно повторили пароль", Toast.LENGTH_SHORT).show()
-            }
-            else {
+            } else {
                 binding.regButton.isEnabled = false
-                register()
+                val login = binding.loginField.text.toString()
+                val pass = binding.passField.text.toString()
+                val name = binding.nameField.text.toString()
+                if (login.isNotEmpty() && pass.length >= 8 && name.isNotEmpty() &&
+                    validation(login) && validation(pass))
+                    register(login, pass, name)
+                else {
+                    Toast.makeText(
+                        this,
+                        "Логин и пароль могут состоять из латинских букв, цифр, подчёркивания и дефиса. Также не ложно быть пустых полей. Минимальная длинна пароля 8 символов.",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    binding.regButton.isEnabled = true
+                }
+
             }
         }
     }
 
-    private fun register() {
+    private fun validation(str: String): Boolean {
+        for (c in str) {
+            if (!c.isDigit() && !c.isLetter() && c != '_' && c != '-')
+                return false
+        }
+        return true
+    }
+
+    private fun register(login: String, pass: String, name: String) {
         App.getApi.register(
-            binding.loginField.text.toString(),
-            binding.passField.text.toString(),
-            binding.nameField.text.toString(),
+            login,
+            pass,
+            name,
             gender
         ).enqueue(object : Callback<ResponseModel> {
             override fun onResponse(call: Call<ResponseModel>, response: Response<ResponseModel>) {
-                Log.d("myLog", ""+response)
                 if (response.isSuccessful) {
                     val sharedPreferences = getSharedPreferences("user", Context.MODE_PRIVATE)
                     val body = response.body()
@@ -61,15 +77,20 @@ class RegisterActivity : AppCompatActivity() {
                         sharedPreferences.edit().putString("name", it.user.name).apply()
                     }
                     startMain()
-                }
-                else {
-                    Log.d("myLog", "Анальный ответик")
+                } else {
+                    Toast.makeText(this@RegisterActivity, "Неверные данные", Toast.LENGTH_SHORT)
+                        .show()
                 }
                 binding.regButton.isEnabled = true
             }
 
             override fun onFailure(call: Call<ResponseModel>, t: Throwable) {
-                t.printStackTrace()
+//                t.printStackTrace()
+                Toast.makeText(
+                    parent,
+                    "Что-то пошло не по плану, попробуйте позже",
+                    Toast.LENGTH_SHORT
+                ).show()
                 binding.regButton.isEnabled = true
             }
         })
@@ -77,6 +98,6 @@ class RegisterActivity : AppCompatActivity() {
 
     fun startMain() {
         startActivity(Intent(this, MainPartActivity::class.java))
-        finish()
+        finishAffinity()
     }
 }

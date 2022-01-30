@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.MenuItem;
 
@@ -18,8 +19,11 @@ import ru.fefu.profile.ProfileFragment;
 
 public class MainPartActivity extends AppCompatActivity implements NavigationBarView.OnItemSelectedListener{
 
+    public static boolean IS_ALIVE = false;
+
     FragmentManager fm = getSupportFragmentManager();
 
+    @SuppressLint("NonConstantResourceId")
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         Fragment active = fm.findFragmentByTag("ActivityFragment");
@@ -61,6 +65,8 @@ public class MainPartActivity extends AppCompatActivity implements NavigationBar
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        IS_ALIVE = true;
+
         BottomNavigationView bottomNav = findViewById(R.id.bottomNav);
         bottomNav.setOnItemSelectedListener(this);
 
@@ -71,5 +77,9 @@ public class MainPartActivity extends AppCompatActivity implements NavigationBar
         }
     }
 
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        IS_ALIVE = false;
+    }
 }
