@@ -47,7 +47,6 @@ class RegisterActivity : AppCompatActivity() {
                     ).show()
                     binding.regButton.isEnabled = true
                 }
-
             }
         }
     }

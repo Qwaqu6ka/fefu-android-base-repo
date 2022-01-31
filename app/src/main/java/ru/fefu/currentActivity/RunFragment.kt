@@ -70,5 +70,12 @@ class RunFragment : BaseFragment<FragmentRunBinding>(R.layout.fragment_run) {
             activity.startService(intent)
             activity.onBackPressed()
         }
+
+        binding.finishButton.setOnClickListener {
+            val intent = Intent(activity, LocationService::class.java).apply {
+                action = LocationService.ACTION_CANCEL
+            }
+            activity?.startService(intent)
+        }
     }
 }
