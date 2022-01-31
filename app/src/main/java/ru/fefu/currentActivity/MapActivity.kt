@@ -23,16 +23,17 @@ import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.LocationSettingsRequest
 import org.osmdroid.config.Configuration
-import org.osmdroid.events.MapEventsReceiver
 import org.osmdroid.util.BoundingBox
 import org.osmdroid.util.GeoPoint
-import org.osmdroid.views.overlay.MapEventsOverlay
 import org.osmdroid.views.overlay.Polyline
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay
 import ru.fefu.activitytracker.LocationService
 import ru.fefu.activitytracker.R
 import ru.fefu.activitytracker.databinding.ActivityMapBinding
+import ru.fefu.database.App
+import ru.fefu.database.Point
+import ru.fefu.mainmenu.MainPartActivity
 import java.lang.Exception
 
 class MapActivity : AppCompatActivity() {
@@ -40,11 +41,12 @@ class MapActivity : AppCompatActivity() {
     companion object {
         private const val REQUEST_CODE_RESOLVE_GOOGLE_API_ERROR = 1337
         private const val REQUEST_CODE_RESOLVE_GPS_ERROR = 1338
+        var lastDrawnPoint: Point = Point(0.0, 0.0)
     }
 
     private lateinit var binding: ActivityMapBinding
 
-    private val polyline by lazy {
+    val polyline by lazy {
         Polyline().apply {
             outlinePaint.color = ContextCompat.getColor(
                 this@MapActivity,
@@ -79,14 +81,20 @@ class MapActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         val cardView: CardView = binding.cardView
-        val fm: FragmentManager = supportFragmentManager
-
         cardView.setBackgroundResource(R.drawable.card_view_bg)
 
-        fm.beginTransaction()
-            .add(R.id.container, PrepareFragment(), "PrepareFragment")
-            .commit()
+        val fm: FragmentManager = supportFragmentManager
 
+        if (LocationService.IS_ALIVE) {
+            fm.beginTransaction()
+                .replace(R.id.containerMapActivity, RunFragment())
+                .commit()
+        }
+        else {
+            fm.beginTransaction()
+                .replace(R.id.containerMapActivity, PrepareFragment())
+                .commit()
+        }
 
         Configuration.getInstance().load(this, getPreferences(Context.MODE_PRIVATE))
 
@@ -96,7 +104,6 @@ class MapActivity : AppCompatActivity() {
                 Manifest.permission.ACCESS_FINE_LOCATION
             )
         )
-
         initMap()
     }
 
@@ -128,8 +135,9 @@ class MapActivity : AppCompatActivity() {
 
     fun startLocationService() {
         if (isGooglePlayServicesAvailable()) {
+            val id = App.INSTANCE.db.activeDao().getLastActiveId()
             checkIfGpsEnabled(
-                { LocationService.startForeground(this, 1) }, // TODO: брать id новой активности
+                { LocationService.startForeground(this, id) },
                 {
                     if (it is ResolvableApiException) {
                         it.startResolutionForResult(this,
@@ -189,16 +197,6 @@ class MapActivity : AppCompatActivity() {
                 false
             )
         }
-
-        val eventReceiver = object : MapEventsReceiver {
-            override fun singleTapConfirmedHelper(p: GeoPoint?): Boolean {
-                polyline.addPoint(p)
-                return true
-            }
-
-            override fun longPressHelper(p: GeoPoint?): Boolean = false
-        }
-        binding.mapView.overlays.add(MapEventsOverlay(eventReceiver))
         binding.mapView.overlayManager.add(polyline)
     }
 
@@ -259,5 +257,14 @@ class MapActivity : AppCompatActivity() {
             }
             .setNegativeButton("Отмена") { _, _ -> }
             .show()
+    }
+
+    override fun onBackPressed() {
+        if (MainPartActivity.IS_ALIVE)
+            super.onBackPressed()
+        else {
+            startActivity(Intent(this, MainPartActivity::class.java))
+            finish()
+        }
     }
 }

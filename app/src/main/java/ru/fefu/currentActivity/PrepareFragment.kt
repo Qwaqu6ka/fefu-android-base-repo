@@ -1,6 +1,8 @@
 package ru.fefu.currentActivity
 
 import android.Manifest
+import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import ru.fefu.activitytracker.R
 import ru.fefu.activitytracker.databinding.FragmentPrepareBinding
@@ -14,9 +16,11 @@ import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import org.osmdroid.util.GeoPoint
 import ru.fefu.database.ActiveTypes
 import ru.fefu.database.Activity
 import ru.fefu.database.App
+import ru.fefu.mainmenu.MainPartActivity
 import java.util.*
 
 class PrepareFragment : BaseFragment<FragmentPrepareBinding> (R.layout.fragment_prepare) {
@@ -42,9 +46,6 @@ class PrepareFragment : BaseFragment<FragmentPrepareBinding> (R.layout.fragment_
                 false
             )
 
-        val runFragment = parentFragmentManager.findFragmentByTag("RunFragment")
-        val prepareFragment = parentFragmentManager.findFragmentByTag("PrepareFragment")
-
         button.setOnClickListener {
             if (ContextCompat.checkSelfPermission(
                     activity,
@@ -59,34 +60,19 @@ class PrepareFragment : BaseFragment<FragmentPrepareBinding> (R.layout.fragment_
                 )
             }
             else {
-                parentFragmentManager.setFragmentResult(
-                    "prepareFragment",
-                    bundleOf("bundleKey" to ActiveTypes.values()[activeObject].value)
+                val newActivity = Activity(
+                    0,
+                    ActiveTypes.values()[activeObject],
+                    Date(),
+                    null,
+                    "defalut@user", // имя если активность наша
+                    listOf()
                 )
-                if (prepareFragment != null)
-                    if (runFragment != null)
-                        parentFragmentManager.beginTransaction()
-                            .hide(prepareFragment)
-                            .show(runFragment)
-                            .addToBackStack("RunFragment")
-                            .commit()
-                    else
-                        parentFragmentManager.beginTransaction()
-                            .hide(prepareFragment)
-                            .add(R.id.container, RunFragment(), "RunFragment")
-                            .addToBackStack("RunFragment")
-                            .commit()
+                App.INSTANCE.db.activeDao().insert(newActivity)
 
-                val activityId =
-                    App.INSTANCE.db.activeDao().insert(
-                    Activity(
-                        0,
-                        ActiveTypes.values()[activeObject],
-                        Date(),
-                        null,
-                        listOf()
-                    )
-                )
+                parentFragmentManager.beginTransaction()
+                    .replace(R.id.containerMapActivity, RunFragment())
+                    .commit()
 
                 activity.startLocationService()
             }

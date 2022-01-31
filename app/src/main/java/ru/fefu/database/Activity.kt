@@ -9,5 +9,6 @@ data class Activity (
     @ColumnInfo(name = "active_type") val activeType: ActiveTypes,
     @ColumnInfo(name = "start_time") val startTime: Date,
     @ColumnInfo(name = "finish_time") val finishTime: Date?,
-    val coordinates: List<Point>?
+    @ColumnInfo(name = "user_name") val userName: String,
+    val coordinates: List<Point>
 )

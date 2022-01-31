@@ -16,10 +16,14 @@ import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
 import ru.fefu.currentActivity.MapActivity
 import ru.fefu.database.App
+import ru.fefu.database.Point
+import ru.fefu.mainmenu.MainPartActivity
+import java.util.*
 
 class LocationService : Service() {
 
     companion object {
+        var IS_ALIVE = false
         private const val TAG = "ForegroundService"
         private const val CHANNEL_ID = "foreground_service_id"
         private const val EXTRA_ID = "id"
@@ -56,13 +60,23 @@ class LocationService : Service() {
         super.onStartCommand(intent, flags, startId)
         Log.d(TAG, "onStartCommand; ${intent?.getIntExtra(EXTRA_ID, -1)}")
         if (intent?.action == ACTION_CANCEL) {
-            // TODO: остановить времся и убрать null
+            IS_ALIVE = false
+            val id = App.INSTANCE.db.activeDao().getLastActiveId()
+            App.INSTANCE.db.activeDao().finishActivity(id, Date())
+//            val pendingIntent = PendingIntent.getActivity(
+//                this,
+//                0,
+//                Intent(this, MainPartActivity::class.java),
+//                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) PendingIntent.FLAG_IMMUTABLE else 0
+//            )
+//            startActivity(pendingIntent)
             stopLocationUpdates()
             stopForeground(true)
             stopSelf()
             return START_NOT_STICKY
         } else if (intent?.action == ACTION_START) {
-            startLocationUpdates(intent.getIntExtra(EXTRA_ID, -1))
+            IS_ALIVE = true
+            startLocationUpdates((intent.getIntExtra(EXTRA_ID, -1)).toLong())
             return START_REDELIVER_INTENT
         }
         return START_NOT_STICKY
@@ -75,8 +89,8 @@ class LocationService : Service() {
     }
 
     @SuppressLint("MissingPermission")
-    private fun startLocationUpdates(id: Int) {
-        if (id == -1) stopSelf()
+    private fun startLocationUpdates(id: Long) {
+        if (id == (-1).toLong()) stopSelf()
         //check if permission denied then stopSelf
         locationCallback?.let { fusedLocationClient.removeLocationUpdates(it) }
         ActivityLocationCallback(id).apply {
@@ -133,19 +147,16 @@ class LocationService : Service() {
         }
     }
 
-    inner class ActivityLocationCallback(private val activityId: Int) : LocationCallback() {
-        override fun onLocationResult(result: LocationResult) {
-            val lastLocation = result.lastLocation ?: return
-            // put values into db
+    inner class ActivityLocationCallback(private val activityId: Long) : LocationCallback() {
 
-//            val activity = App.INSTANCE.db.activeDao().getById(activityId)
-//            val activityUpdate = ActivityUpdate(
-//                activityId,
-//                null,
-//                activity.coordinates.plus(lastLocation.latitude to lastLocation.longitude)
-//            )
-//            App.INSTANCE.db.activeDao().update(activityUpdate)
-            // https://developer.android.com/reference/androidx/room/Update
+        var list: MutableList<Point> = mutableListOf()
+
+        override fun onLocationResult(result: LocationResult) {
+            val lastLocation = result.lastLocation
+            // put values into db
+            list.add(Point(lastLocation.latitude, lastLocation.longitude))
+            App.INSTANCE.db.activeDao().updateCoords(activityId, list)
+            Log.d(TAG, ""+list)
             Log.d(TAG, "Latitude: ${lastLocation.latitude}; Longitude: ${lastLocation.longitude}")
         }
     }
