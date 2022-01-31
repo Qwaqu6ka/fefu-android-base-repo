@@ -146,6 +146,7 @@ class LocationService : Service() {
             manager.createNotificationChannel(channel)
         }
     }
+
     inner class ActivityLocationCallback(private val activityId: Long) : LocationCallback() {
 
         var list: MutableList<Point> = mutableListOf()
