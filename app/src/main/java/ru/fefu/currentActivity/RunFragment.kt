@@ -36,19 +36,12 @@ class RunFragment : BaseFragment<FragmentRunBinding>(R.layout.fragment_run) {
 
 
         val active = App.INSTANCE.db.activeDao().getLastActive()
-        var lastDrawnReached = false
         for (point in active.coordinates) {
-            if (lastDrawnReached) {
                 val p = GeoPoint(
                     point.latitude,
                     point.longitude
                 )
                 activity.polyline.addPoint(p)
-            }
-            else {
-                if (point == MapActivity.lastDrawnPoint)
-                    lastDrawnReached = true
-            }
         }
 
         binding.finishButton.setOnClickListener {
